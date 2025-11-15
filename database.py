@@ -7,10 +7,11 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+load_dotenv()
 
 # Databse configuration 
-DATABASE_URL = os.getenv("DATABASE_URL")
-ASYNC_DATABASE_URL = os.getenv("ASYNC_DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL") #postgresql://username:password@localhost:5432/inventory_db
+ASYNC_DATABASE_URL = os.getenv("ASYNC_DATABASE_URL") #postgresql+asyncpg://username:password@localhost:5432/inventory_db
 
 # Synchronous engine for migrations and setup
 engine = create_engine(DATABASE_URL)

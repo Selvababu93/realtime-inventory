@@ -1,3 +1,4 @@
+import os
 import asyncio
 import logging
 import json
@@ -5,7 +6,7 @@ from contextlib import asynccontextmanager
 from typing import List
 
 from fastapi import FastAPI, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -43,7 +44,7 @@ class ConnectionManager:
         disconnected = []
         for connection in self.active_connections:
             try:
-                await connection.send_text(json.dump(message))
+                await connection.send_text(json.dumps(message))
             except Exception as e:
                 logger.error(f"Error sending message to Websocket: {e}")
                 disconnected.append(connection)
@@ -103,7 +104,25 @@ app = FastAPI(title="Real-Time Inventory tracker", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-@app.post("api/inventory", response_model=InventoryResponse)
+# Routes
+'''
+@app.get("/")
+async def read_root():
+    """ Serve the main page 
+    You can modify HTML on-the-fly if needed (like inserting dynamic content).
+    Useful for template-like behavior without using a template engine
+    """
+    with open("static/index.html", "r") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
+'''
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.get("/")
+def read_index():
+    return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
+
+@app.post("/api/inventory", response_model=InventoryResponse)
 async def create_inventory_item(
     item: InventoryCreate,
     db: AsyncSession = Depends(get_async_db)

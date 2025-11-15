@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Inventory Tracker</title>
+    <!-- Styles omitted for brevity, use the styles from the original tutorial -->
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📦 Real-Time Inventory Tracker</h1>
+        <p>Add, update, and track inventory items in real-time</p>
+      </div>
+      <div class="card">
+        <div id="connection-status" class="status disconnected">
+          🔴 Disconnected from server
+        </div>
+        <div class="form-section">
+          <h2>Add New Item</h2>
+          <form id="add-item-form">
+            <div class="form-group">
+              <input
+                type="text"
+                id="item-name"
+                placeholder="Item name"
+                required
+              />
+              <input
+                type="number"
+                id="item-quantity"
+                placeholder="Quantity"
+                min="0"
+                required
+              />
+              <button type="submit" class="btn">Add Item</button>
+            </div>
+          </form>
+        </div>
+        <div class="inventory-list">
+          <h2>Inventory Items</h2>
+          <div id="inventory-container">
+            <div class="loading">Loading inventory...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="static/index.js"></script>
+  </body>
+</html>

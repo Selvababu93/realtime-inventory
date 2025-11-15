@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS inventory (
 
 
 -- Create the trigger function for notifications
-CREATE OR REPLACE FUNCTION notify_inventory_changes() RETURN trigger AS $$
+CREATE OR REPLACE FUNCTION notify_inventory_changes() RETURNS trigger AS $$
 DECLARE
     payload JSON;
 BEGIN
@@ -20,10 +20,10 @@ BEGIN
     PERFORM pg_notify('inventory_channel', payload::text);
     RETURN COALESCE(NEW, OLD);
 END;
-$$ LANGUAGE plsql;
+$$ LANGUAGE plpgsql;
 
 -- Create the trigger
-DROP TRIGGER IF EXIXTS inventory_trigger ON inventor;
+DROP TRIGGER IF EXISTS inventory_trigger ON inventory;
 CREATE TRIGGER inventory_trigger
 AFTER INSERT OR UPDATE OR DELETE ON inventory
 FOR EACH ROW EXECUTE FUNCTION notify_inventory_changes();
